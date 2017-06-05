@@ -24,12 +24,6 @@ func init() {
 		logrus.Fatal(err.Error())
 	}
 	logrus.Infof("Configs: %v", configs)
-	logrus.Info("Starting Slack")
-
-	slackAgent, err = startSlack()
-	if err != nil {
-		logrus.Fatal(err.Error())
-	}
 	fmt.Println("MySlackBot running!")
 }
 
@@ -37,6 +31,15 @@ func main() {
 	cmd := flag.String("cmd", "", "Command to be executed: (choose)")
 
 	flag.Parse()
+
+	logrus.Info("Starting Slack")
+
+	var err error
+	slackAgent, err = startSlack()
+	if err != nil {
+		logrus.Fatal(err.Error())
+		os.Exit(1)
+	}
 
 	logrus.Infof("Command received: %s", *cmd)
 

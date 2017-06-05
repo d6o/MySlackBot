@@ -17,4 +17,4 @@ RUN make deps
 
 COPY . ${APP_DIR}
 
-CMD CompileDaemon -build="make install" -command="msb -cmd=${APP_FUN}"
+CMD CompileDaemon -build="make install" -command="msb ${APP_FUN}"

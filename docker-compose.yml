@@ -11,10 +11,10 @@ services:
   choose:
     extends: base-bot
     environment:
-      APP_FUN: "choose"
+      APP_FUN: "-cmd=choose"
 
   weather:
     extends: base-bot
     environment:
-      APP_FUN: "weather"
+      APP_FUN: "-cmd=weather"
 
