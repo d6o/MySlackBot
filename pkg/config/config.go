@@ -2,5 +2,6 @@ package config
 
 //Specification Project configuration structure
 type Specification struct {
-	SlackToken string
+	SlackToken       string
+	OpenWeatherToken string
 }

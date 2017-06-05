@@ -42,7 +42,9 @@ func main() {
 
 	switch *cmd {
 	case "choose":
-		choose()
+		chooseCMD()
+	case "weather":
+		weatherCMD()
 	}
 
 	logrus.Fatal("Not good...")
