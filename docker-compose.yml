@@ -1,0 +1,14 @@
+version: '2'
+services:
+  base-bot:
+    build: ./
+    volumes:
+      - .:/go/src/github.com/disiqueira/MySlackBot
+    environment:
+      MSB_SLACKTOKEN: ${SLACK_TOKEN}
+
+  choose:
+    extends: base-bot
+    environment:
+      APP_FUN: "choose"
+

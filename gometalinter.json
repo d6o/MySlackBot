@@ -1,0 +1,4 @@
+{
+  "Enable": ["goimports", "misspell", "unused"],
+  "Skip": ["vendor"]
+}
