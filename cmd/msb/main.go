@@ -52,6 +52,8 @@ func main() {
 		lastfmCMD()
 	case "wolfram":
 		wolframCMD()
+	case "pokemon":
+		pokemonCMD()
 	}
 
 	logrus.Fatal("Not good...")

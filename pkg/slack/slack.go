@@ -15,6 +15,7 @@ const (
 	counterInitial    = 1
 	counterIncrement  = 1
 	webSocketProtocol = ""
+	spamMessage       = "Pssst! I didn’t unfurl"
 )
 
 //New TODO
@@ -60,12 +61,32 @@ func (a *Agent) text() (m Message, err error) {
 		logrus.Info("Wrong type")
 		return a.text()
 	}
+	if strings.Contains(m.Text, spamMessage) {
+		logrus.Info("Spam block received...")
+		return a.text()
+	}
+	return
+}
+
+//HasWord TODO
+func (a *Agent) HasWord(word string) (m Message, err error) {
+	m, err = a.text()
+	word = strings.ToLower(word)
+
+	logrus.Infof("Text: %s", m.Text)
+	logrus.Infof("Word: %s", word)
+
+	if !strings.Contains(strings.ToLower(m.Text), word) {
+		logrus.Info("Does not have the right word, discarding...")
+		return a.HasWord(word)
+	}
 	return
 }
 
 //PrefixMessage returns a Message when it has some prefix string.
 func (a *Agent) PrefixMessage(prefix string) (m Message, err error) {
 	m, err = a.text()
+	prefix = strings.ToLower(prefix)
 
 	logrus.Infof("Text: %s", m.Text)
 	logrus.Infof("Prefix: %s", prefix)

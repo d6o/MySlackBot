@@ -9,4 +9,3 @@ import:
 - package: golang.org/x/net
   subpackages:
   - websocket
-- package: github.com/argandas/gokemon

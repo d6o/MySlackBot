@@ -30,3 +30,8 @@ services:
       APP_FUN: "-cmd=wolfram"
       MSB_WOLFRAMTOKEN: ${WOLFRAM_TOKEN}
 
+  pokemon:
+    extends: base-bot
+    environment:
+      APP_FUN: "-cmd=pokemon"
+

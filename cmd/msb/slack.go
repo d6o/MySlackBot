@@ -86,3 +86,15 @@ func wolframCMD() {
 		slackAgent.SendMessage(answer)
 	}
 }
+
+func pokemonCMD() {
+	logrus.Info("Starting Pokemon")
+	for {
+		m, err := slackAgent.HasWord("pokemon")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		slackAgent.SendMessage(answerers.Pokemon(m))
+	}
+}

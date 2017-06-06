@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/parnurzeal/gorequest"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -32,10 +33,12 @@ func New(token string) (*Response, error) {
 
 func makeRequest(token string) (body string, err error) {
 	url := fmt.Sprintf(url, token)
+	logrus.Infof("Making Request: %s", url)
 	_, body, errs := gorequest.New().Get(url).End()
 	if errs != nil {
 		return "", errs[0]
 	}
+	logrus.Infof("Response body: %s", body)
 	return body, nil
 }
 
