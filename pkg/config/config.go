@@ -5,4 +5,5 @@ type Specification struct {
 	SlackToken       string
 	OpenWeatherToken string
 	LastFMToken      string
+	WolframToken     string
 }

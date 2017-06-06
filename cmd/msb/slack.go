@@ -4,6 +4,7 @@ import (
 	"github.com/disiqueira/MySlackBot/pkg/answerers"
 	"github.com/disiqueira/MySlackBot/pkg/answerers/lastfm"
 	"github.com/disiqueira/MySlackBot/pkg/answerers/weather"
+	"github.com/disiqueira/MySlackBot/pkg/answerers/wolfram"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
 	"github.com/disiqueira/MySlackBot/pkg/slack/rtm"
 	"github.com/sirupsen/logrus"
@@ -59,6 +60,25 @@ func lastfmCMD() {
 			logrus.Fatal(err)
 		}
 		answer, err := answerers.LastFM(m, last)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		slackAgent.SendMessage(answer)
+	}
+}
+
+func wolframCMD() {
+	logrus.Info("Starting Wolfram Alpha")
+
+	wolf := wolfram.New(configs.WolframToken)
+
+	for {
+		m, err := slackAgent.PrefixMessage("aline")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		answer, err := answerers.Wolfram(m, wolf)
 		if err != nil {
 			logrus.Fatal(err)
 		}

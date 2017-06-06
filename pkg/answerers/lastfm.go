@@ -11,14 +11,6 @@ const (
 	lastfmAnswerFormat = "%s is listening to \"%s\" by %s from the album %s."
 )
 
-var (
-	lastfmUserPrefs map[string]string
-)
-
-func init() {
-	lastfmUserPrefs = make(map[string]string)
-}
-
 //LastFM TODO
 func LastFM(message slack.Message, lastfm *lastfm.RecentTracks) (answer slack.Message, err error) {
 	answer = message
@@ -27,7 +19,7 @@ func LastFM(message slack.Message, lastfm *lastfm.RecentTracks) (answer slack.Me
 	if err != nil {
 		return answer, err
 	}
-	lastfmUserPrefs[message.User] = user
+	userPrefs[message.User] = user
 
 	lastTrack, err := resp.LastTrack()
 	if err != nil {
@@ -43,10 +35,10 @@ func bestUser(message slack.Message) string {
 	if len(message.Text) > 4 {
 		return message.Text
 	}
-	_, prs := lastfmUserPrefs[message.User]
+	_, prs := userPrefs[message.User]
 	if prs {
 
-		return lastfmUserPrefs[message.User]
+		return userPrefs[message.User]
 	}
 	return "maef_5"
 }

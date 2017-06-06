@@ -24,3 +24,9 @@ services:
       APP_FUN: "-cmd=lastfm"
       MSB_LASTFMTOKEN: ${LASTFM_TOKEN}
 
+  wolfram:
+    extends: base-bot
+    environment:
+      APP_FUN: "-cmd=wolfram"
+      MSB_WOLFRAMTOKEN: ${WOLFRAM_TOKEN}
+
