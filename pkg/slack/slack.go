@@ -43,6 +43,8 @@ type Message struct {
 	Type    string `json:"type"`
 	Channel string `json:"channel"`
 	Text    string `json:"text"`
+	User    string `json:"user"`
+	Ts      string `json:"ts"`
 }
 
 func (a *Agent) message() (m Message, err error) {
@@ -68,12 +70,13 @@ func (a *Agent) PrefixMessage(prefix string) (m Message, err error) {
 	logrus.Infof("Text: %s", m.Text)
 	logrus.Infof("Prefix: %s", prefix)
 
-	if !strings.HasPrefix(m.Text, prefix) {
+	if !strings.HasPrefix(strings.ToLower(m.Text), prefix) {
 		logrus.Info("Wrong prefix")
 		return a.PrefixMessage(prefix)
 	}
 	logrus.Info("Removing prefix")
 	m.Text = strings.Replace(m.Text, prefix+" ", "", -1)
+	m.Text = strings.Trim(m.Text, " ")
 	return
 }
 
