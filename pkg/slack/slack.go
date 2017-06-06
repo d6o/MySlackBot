@@ -75,7 +75,7 @@ func (a *Agent) PrefixMessage(prefix string) (m Message, err error) {
 		return a.PrefixMessage(prefix)
 	}
 	logrus.Info("Removing prefix")
-	m.Text = strings.Replace(m.Text, prefix+" ", "", -1)
+	m.Text = strings.Replace(m.Text, prefix, "", 1)
 	m.Text = strings.Trim(m.Text, " ")
 	return
 }

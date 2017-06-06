@@ -48,6 +48,8 @@ func main() {
 		chooseCMD()
 	case "weather":
 		weatherCMD()
+	case "lastfm":
+		lastfmCMD()
 	}
 
 	logrus.Fatal("Not good...")

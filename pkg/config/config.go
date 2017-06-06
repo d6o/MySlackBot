@@ -4,4 +4,5 @@ package config
 type Specification struct {
 	SlackToken       string
 	OpenWeatherToken string
+	LastFMToken      string
 }

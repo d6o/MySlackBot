@@ -6,7 +6,6 @@ services:
       - .:/go/src/github.com/disiqueira/MySlackBot
     environment:
       MSB_SLACKTOKEN: ${SLACK_TOKEN}
-      MSB_OPENWEATHERTOKEN: ${OPEN_WEATHER_TOKEN}
 
   choose:
     extends: base-bot
@@ -17,4 +16,11 @@ services:
     extends: base-bot
     environment:
       APP_FUN: "-cmd=weather"
+      MSB_OPENWEATHERTOKEN: ${OPEN_WEATHER_TOKEN}
+
+  lastfm:
+    extends: base-bot
+    environment:
+      APP_FUN: "-cmd=lastfm"
+      MSB_LASTFMTOKEN: ${LASTFM_TOKEN}
 

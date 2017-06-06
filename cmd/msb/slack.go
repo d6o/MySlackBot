@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/disiqueira/MySlackBot/pkg/answerers"
+	"github.com/disiqueira/MySlackBot/pkg/answerers/lastfm"
 	"github.com/disiqueira/MySlackBot/pkg/answerers/weather"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
 	"github.com/disiqueira/MySlackBot/pkg/slack/rtm"
@@ -39,6 +40,25 @@ func weatherCMD() {
 			logrus.Fatal(err)
 		}
 		answer, err := answerers.Weather(m, we)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		slackAgent.SendMessage(answer)
+	}
+}
+
+func lastfmCMD() {
+	logrus.Info("Starting LastFM")
+
+	last := lastfm.New(configs.LastFMToken)
+
+	for {
+		m, err := slackAgent.PrefixMessage("lastfm")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		answer, err := answerers.LastFM(m, last)
 		if err != nil {
 			logrus.Fatal(err)
 		}
