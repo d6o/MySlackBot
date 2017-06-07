@@ -3,12 +3,16 @@ package wolfram
 import (
 	"fmt"
 
+	"strings"
+
 	"github.com/parnurzeal/gorequest"
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	url = "https://api.wolframalpha.com/v1/result?appid=%s&i=%s"
+	url         = "https://api.wolframalpha.com/v1/result?appid=%s&i=%s"
+	errorString = "Wolfram|Alpha did not understand your input"
+	errorAnswer = "Aiii, não entendi... :("
 )
 
 //Short TODO
@@ -23,11 +27,15 @@ func New(token string) *Short {
 	}
 }
 
-//ByName returns weather by City name.
+//Ask returns weather by City name.
 func (w *Short) Ask(question string) (string, error) {
 	body, err := w.makeRequest(question)
 	if err != nil {
 		return "Error asking question :(", err
+	}
+
+	if strings.Contains(body, errorString) {
+		body = errorAnswer
 	}
 
 	return body, nil
