@@ -40,3 +40,8 @@ services:
     environment:
       APP_FUN: "-cmd=shrug"
 
+  status:
+    extends: base-bot
+    environment:
+      APP_FUN: "-cmd=status"
+

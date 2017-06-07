@@ -110,3 +110,23 @@ func shurgCMD() {
 		slackAgent.SendMessage(m)
 	}
 }
+
+func statusCMD() {
+	logrus.Info("Starting Status")
+	for {
+		m, err := slackAgent.PrefixMessage("Aline tá viva?")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		answers, err := answerers.Status(m)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		for _, answer := range answers {
+			slackAgent.SendMessage(answer)
+		}
+
+	}
+}

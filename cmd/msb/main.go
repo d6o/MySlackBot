@@ -56,6 +56,8 @@ func main() {
 		pokemonCMD()
 	case "shrug":
 		shurgCMD()
+	case "status":
+		statusCMD()
 	}
 
 	logrus.Fatal("Not good...")
