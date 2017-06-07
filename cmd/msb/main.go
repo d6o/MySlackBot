@@ -54,6 +54,8 @@ func main() {
 		wolframCMD()
 	case "pokemon":
 		pokemonCMD()
+	case "shrug":
+		shurgCMD()
 	}
 
 	logrus.Fatal("Not good...")

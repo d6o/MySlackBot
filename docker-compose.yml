@@ -35,3 +35,8 @@ services:
     environment:
       APP_FUN: "-cmd=pokemon"
 
+  shrug:
+    extends: base-bot
+    environment:
+      APP_FUN: "-cmd=shrug"
+

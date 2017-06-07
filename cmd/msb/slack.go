@@ -98,3 +98,15 @@ func pokemonCMD() {
 		slackAgent.SendMessage(answerers.Pokemon(m))
 	}
 }
+
+func shurgCMD() {
+	logrus.Info("Starting Shrug")
+	for {
+		m, err := slackAgent.HasWord("shrug")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		m.Text = "¯\\_(ツ)_/¯"
+		slackAgent.SendMessage(m)
+	}
+}
