@@ -15,6 +15,8 @@ WORKDIR ${APP_DIR}
 
 RUN make deps
 
+RUN apk add --no-cache gcc
+
 COPY . ${APP_DIR}
 
 CMD CompileDaemon -build="make install" -command="msb ${APP_FUN}"
