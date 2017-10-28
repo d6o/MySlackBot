@@ -62,6 +62,7 @@ func main() {
 	consumer.RegisterReactor(reactors.NewRandom("random"))
 	consumer.RegisterReactor(reactors.NewInstagram(instagramProvider, "insta"))
 	consumer.RegisterReactor(reactors.NewBikini(instagramProvider, imageProvider, "bikini"))
+	consumer.RegisterReactor(reactors.NewSay("say"))
 
 	if err := consumer.Listen(); err != nil {
 		logrus.Fatal(err.Error())
