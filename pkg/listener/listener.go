@@ -2,6 +2,7 @@ package listener
 
 import (
 	"errors"
+
 	"github.com/disiqueira/MySlackBot/pkg/slack"
 )
 
@@ -18,7 +19,7 @@ type (
 
 	Reactor interface {
 		Execute(slack.Agent, slack.Message) error
-		Usage(slack.Agent, slack.Message)
+		Usage() string
 	}
 )
 
@@ -59,7 +60,9 @@ func (o *consumer) RegisterReactor(r Reactor) {
 func (o *consumer) verifyList(m slack.Message) {
 	if m.Text == "list" {
 		for _, reactor := range o.reactors {
-			reactor.Usage(o.slack, m)
+			answer := m
+			answer.Text = reactor.Usage()
+			o.slack.SendMessage(answer)
 		}
 	}
 }

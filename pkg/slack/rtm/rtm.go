@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (

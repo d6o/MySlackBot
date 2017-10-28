@@ -1,10 +1,11 @@
 package reactors
 
 import (
-	"github.com/disiqueira/MySlackBot/pkg/listener"
-	"github.com/disiqueira/MySlackBot/pkg/slack"
 	"math/rand"
 	"strings"
+
+	"github.com/disiqueira/MySlackBot/pkg/listener"
+	"github.com/disiqueira/MySlackBot/pkg/slack"
 )
 
 type (
@@ -23,10 +24,8 @@ func NewChoose(prefix string) Choose {
 	}
 }
 
-func (c *choose) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = c.prefix + " {param1}, {param2} [, {param3} ...]"
-	agent.SendMessage(answer)
+func (c *choose) Usage() string {
+	return c.prefix + " {param1}, {param2} [, {param3} ...]"
 }
 
 func (c *choose) Execute(agent slack.Agent, message slack.Message) error {

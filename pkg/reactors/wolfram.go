@@ -1,10 +1,11 @@
 package reactors
 
 import (
+	"strings"
+
 	"github.com/disiqueira/MySlackBot/pkg/listener"
 	"github.com/disiqueira/MySlackBot/pkg/provider"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
-	"strings"
 )
 
 type (
@@ -25,10 +26,8 @@ func NewWolfram(provider provider.Wolfram, prefix string) Wolfram {
 	}
 }
 
-func (w *wolfram) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = w.prefix + " {question}"
-	agent.SendMessage(answer)
+func (w *wolfram) Usage() string {
+	return w.prefix + " {question}"
 }
 
 func (w *wolfram) Execute(agent slack.Agent, message slack.Message) error {

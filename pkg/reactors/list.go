@@ -21,10 +21,8 @@ func NewList(prefix string) List {
 	}
 }
 
-func (l *list) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = l.prefix
-	agent.SendMessage(answer)
+func (l *list) Usage() string {
+	return l.prefix
 }
 
 func (l *list) Execute(agent slack.Agent, message slack.Message) error {

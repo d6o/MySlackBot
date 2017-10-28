@@ -2,10 +2,11 @@ package reactors
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/disiqueira/MySlackBot/pkg/listener"
 	"github.com/disiqueira/MySlackBot/pkg/provider"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
-	"strings"
 )
 
 type (
@@ -32,10 +33,8 @@ func NewWeather(provider provider.Weather, prefix, fallback string) Weather {
 	}
 }
 
-func (w *weather) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = w.prefix + " {city}"
-	agent.SendMessage(answer)
+func (w *weather) Usage() string {
+	return w.prefix + " {city}"
 }
 
 func (w *weather) Execute(agent slack.Agent, message slack.Message) error {

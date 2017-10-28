@@ -3,14 +3,15 @@ package reactors
 import (
 	"errors"
 	"fmt"
-	"github.com/disiqueira/MySlackBot/pkg/listener"
-	"github.com/disiqueira/MySlackBot/pkg/provider"
-	"github.com/disiqueira/MySlackBot/pkg/slack"
-	"github.com/sirupsen/logrus"
 	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/disiqueira/MySlackBot/pkg/listener"
+	"github.com/disiqueira/MySlackBot/pkg/provider"
+	"github.com/disiqueira/MySlackBot/pkg/slack"
+	"github.com/sirupsen/logrus"
 )
 
 type (
@@ -36,10 +37,8 @@ func NewPokemon(provider provider.Pokemon, prefix string) Pokemon {
 	}
 }
 
-func (w *pokemon) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = w.prefix + " {pokemon}"
-	agent.SendMessage(answer)
+func (w *pokemon) Usage() string {
+	return w.prefix + " {pokemon}"
 }
 
 func (w *pokemon) Execute(agent slack.Agent, message slack.Message) error {

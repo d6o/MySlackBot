@@ -2,10 +2,11 @@ package reactors
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/disiqueira/MySlackBot/pkg/listener"
 	"github.com/disiqueira/MySlackBot/pkg/provider"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
-	"strings"
 )
 
 type (
@@ -32,10 +33,8 @@ func NewLastFM(provider provider.LastFM, prefix, fallback string) LastFM {
 	}
 }
 
-func (l *lastFM) Usage(agent slack.Agent, message slack.Message) {
-	answer := message
-	answer.Text = l.prefix + " {user}"
-	agent.SendMessage(answer)
+func (l *lastFM) Usage() string {
+	return l.prefix + " {user}"
 }
 
 func (l *lastFM) Execute(agent slack.Agent, message slack.Message) error {

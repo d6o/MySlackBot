@@ -3,10 +3,11 @@ package slack
 import (
 	"sync/atomic"
 
+	"strings"
+
 	"github.com/disiqueira/MySlackBot/pkg/slack/rtm"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/websocket"
-	"strings"
 )
 
 const (
