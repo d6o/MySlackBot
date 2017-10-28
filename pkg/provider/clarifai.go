@@ -162,8 +162,6 @@ func (c *clarifai) makeRequest(r *clarifaiRequest) (string, error) {
 		return "", errs[0]
 	}
 
-	fmt.Println(body)
-
 	return body, nil
 }
 
