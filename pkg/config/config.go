@@ -6,6 +6,7 @@ type (
 		OpenWeatherToken() string
 		LastFMToken() string
 		WolframToken() string
+		ClarifaiToken() string
 	}
 
 	Specs struct {
@@ -13,18 +14,26 @@ type (
 		OpenWeather string `envconfig:"openweather_token" required:"true"`
 		LastFM      string `envconfig:"lastfm_token" required:"true"`
 		Wolfram     string `envconfig:"wolfram_token"`
+		Clarifai    string `envconfig:"clarifai_token"`
 	}
 )
 
 func (s *Specs) SlackToken() string {
 	return s.Slack
 }
+
 func (s *Specs) OpenWeatherToken() string {
 	return s.OpenWeather
 }
+
 func (s *Specs) LastFMToken() string {
 	return s.LastFM
 }
+
 func (s *Specs) WolframToken() string {
 	return s.Wolfram
+}
+
+func (s *Specs) ClarifaiToken() string {
+	return s.Clarifai
 }

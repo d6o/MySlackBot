@@ -44,6 +44,7 @@ func main() {
 	lastFMProvider := provider.NewLastFM(configs.LastFMToken())
 	wolframProvider := provider.NewWolfram(configs.WolframToken())
 	pokemonProvider := provider.NewPokemon()
+	imageProvider := provider.NewImageRecognition(configs.ClarifaiToken())
 
 	consumer := listener.NewConsumer(agent)
 	consumer.RegisterReactor(reactors.NewList("list"))
@@ -52,6 +53,7 @@ func main() {
 	consumer.RegisterReactor(reactors.NewLastFM(lastFMProvider, "lastfm", "maef_5"))
 	consumer.RegisterReactor(reactors.NewWolfram(wolframProvider, "wolfram"))
 	consumer.RegisterReactor(reactors.NewPokemon(pokemonProvider, "pokemon"))
+	consumer.RegisterReactor(reactors.NewImageRecognition(imageProvider, "recog"))
 
 	if err := consumer.Listen(); err != nil {
 		logrus.Fatal(err.Error())
