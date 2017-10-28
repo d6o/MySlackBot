@@ -45,6 +45,11 @@ func main() {
 	wolframProvider := provider.NewWolfram(configs.WolframToken())
 	pokemonProvider := provider.NewPokemon()
 	imageProvider := provider.NewImageRecognition(configs.ClarifaiToken())
+	instagramProvider, err := provider.NewInstagram(configs.InstagramUsername(), configs.InstagramPassword())
+	if err != nil {
+		logrus.Fatal(err.Error())
+		os.Exit(1)
+	}
 
 	consumer := listener.NewConsumer(agent)
 	consumer.RegisterReactor(reactors.NewList("list"))
@@ -55,6 +60,7 @@ func main() {
 	consumer.RegisterReactor(reactors.NewPokemon(pokemonProvider, "pokemon"))
 	consumer.RegisterReactor(reactors.NewImageRecognition(imageProvider, "recog"))
 	consumer.RegisterReactor(reactors.NewRandom("random"))
+	consumer.RegisterReactor(reactors.NewInstagram(instagramProvider, "insta"))
 
 	if err := consumer.Listen(); err != nil {
 		logrus.Fatal(err.Error())
