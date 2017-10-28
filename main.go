@@ -54,6 +54,7 @@ func main() {
 	consumer.RegisterReactor(reactors.NewWolfram(wolframProvider, "wolfram"))
 	consumer.RegisterReactor(reactors.NewPokemon(pokemonProvider, "pokemon"))
 	consumer.RegisterReactor(reactors.NewImageRecognition(imageProvider, "recog"))
+	consumer.RegisterReactor(reactors.NewRandom("random"))
 
 	if err := consumer.Listen(); err != nil {
 		logrus.Fatal(err.Error())
