@@ -43,7 +43,11 @@ func (i *instagram) LastPhotos(profile string, total int) ([]string, error) {
 		urlList = append(urlList, feedList...)
 	}
 
-	return urlList[:total], err
+	if len(urlList) > total {
+		return urlList[:total], err
+	}
+
+	return urlList, err
 }
 
 func (i *instagram) userFeed(userID int64, maxID string) ([]string, string, bool, error) {
