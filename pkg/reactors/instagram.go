@@ -1,7 +1,6 @@
 package reactors
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/disiqueira/MySlackBot/pkg/listener"
@@ -43,19 +42,12 @@ func (i *instagram) Execute(agent slack.Agent, message slack.Message) error {
 	}
 	text := strings.Replace(message.Text, i.prefix, "", 1)
 	text = strings.Trim(text, " ")
-
-	user, numPhotos := i.userAndNumFromMessageText(text)
-
 	answer := message
 
-	fmt.Println(text)
-
-	photos, err := i.provider.LastPhotos(user, numPhotos)
+	photos, err := i.provider.LastPhotos(i.userAndNumFromMessageText(text))
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(photos)
 
 	for _, photo := range photos {
 		answer.Text = photo

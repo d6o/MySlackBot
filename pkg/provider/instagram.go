@@ -58,6 +58,10 @@ func (i *instagram) userFeed(userID int64, maxID string) ([]string, string, bool
 		bestIndex := 0
 		bestWidht := 0
 
+		if len(item.ImageVersions2.Candidates) == 0 {
+			continue
+		}
+
 		for index, candidate := range item.ImageVersions2.Candidates {
 			if candidate.Width > bestWidht {
 				bestIndex = index
