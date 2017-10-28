@@ -1,13 +1,10 @@
 package reactors
 
 import (
-	"math/rand"
 	"strings"
 
-	"fmt"
 	"github.com/disiqueira/MySlackBot/pkg/listener"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
-	"strconv"
 )
 
 type (
