@@ -88,7 +88,7 @@ type (
 )
 
 const (
-	clarifaiURL = "https://api.clarifai.com/v2/models/e0be3b9d6a454f0493ac3a30784001ff/outputs"
+	clarifaiURL = "https://api.clarifai.com/v2/models/aaa03c23b3724a16a56b629203edc62c/outputs"
 	clarifaiOK  = "Ok"
 	minValue    = 0.3
 )
