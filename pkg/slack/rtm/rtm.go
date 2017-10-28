@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/parnurzeal/gorequest"
 	"github.com/sirupsen/logrus"
+	"net/http"
 )
 
 const (
@@ -23,26 +23,30 @@ type Response struct {
 
 //New returns a RTM response object.
 func New(token string) (*Response, error) {
-	body, err := makeRequest(token)
+	resp, err := makeRequest(token)
 	if err != nil {
 		return nil, err
 	}
 
-	return transformStringToResponse(body)
+	return transformStringToResponse(resp)
 }
 
-func makeRequest(token string) (body string, err error) {
+func makeRequest(token string) (*http.Response, error) {
 	url := fmt.Sprintf(url, token)
 	logrus.Infof("Making Request: %s", url)
-	_, body, errs := gorequest.New().Get(url).End()
-	if errs != nil {
-		return "", errs[0]
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
 	}
-	logrus.Infof("Response body: %s", body)
-	return body, nil
+
+	return http.DefaultClient.Do(req)
 }
 
-func transformStringToResponse(body string) (resp *Response, err error) {
-	err = json.Unmarshal([]byte(body), &resp)
-	return
+func transformStringToResponse(response *http.Response) (*Response, error) {
+	resp := Response{}
+	if err := json.NewDecoder(response.Body).Decode(&resp); err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
 }

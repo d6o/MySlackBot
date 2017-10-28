@@ -1,12 +1,12 @@
 package slack
 
 import (
-	"strings"
 	"sync/atomic"
 
 	"github.com/disiqueira/MySlackBot/pkg/slack/rtm"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/websocket"
+	"strings"
 )
 
 const (
@@ -18,91 +18,70 @@ const (
 	spamMessage       = "Pssst! I didn’t unfurl"
 )
 
-//New TODO
-func New(rtm *rtm.Response) (a *Agent, err error) {
-	a = &Agent{
+type (
+	Agent interface {
+		Message() (Message, error)
+		SendMessage(Message)
+	}
+
+	agent struct {
+		ws      *websocket.Conn
+		counter uint64
+	}
+
+	Message struct {
+		ID      uint64 `json:"id"`
+		Type    string `json:"type"`
+		Channel string `json:"channel"`
+		Text    string `json:"text"`
+		User    string `json:"user"`
+		Ts      string `json:"ts"`
+	}
+)
+
+func New(rtm *rtm.Response) (Agent, error) {
+	a := &agent{
 		counter: counterInitial,
 	}
-	err = a.connect(rtm.URL)
-	return
+	return a, a.connect(rtm.URL)
 }
 
-//Agent TODO
-type Agent struct {
-	ws      *websocket.Conn
-	counter uint64
-}
-
-func (a *Agent) connect(rtm string) (err error) {
+func (a *agent) connect(rtm string) error {
+	var err error
 	a.ws, err = websocket.Dial(rtm, webSocketProtocol, originURL)
-	return
+	return err
 }
 
-//Message TODO
-type Message struct {
-	ID      uint64 `json:"id"`
-	Type    string `json:"type"`
-	Channel string `json:"channel"`
-	Text    string `json:"text"`
-	User    string `json:"user"`
-	Ts      string `json:"ts"`
-}
+func (a *agent) message() (Message, error) {
+	var m Message
+	if err := websocket.JSON.Receive(a.ws, &m); err != nil {
+		return m, err
+	}
 
-func (a *Agent) message() (m Message, err error) {
-	err = websocket.JSON.Receive(a.ws, &m)
-	return
-}
-
-func (a *Agent) text() (m Message, err error) {
-	m, err = a.message()
-	logrus.Info("Message received.")
 	logrus.Infof("Message: %v", m)
-	if m.Type != textType {
-		logrus.Info("Wrong type")
-		return a.text()
-	}
-	if strings.Contains(m.Text, spamMessage) {
-		logrus.Info("Spam block received...")
-		return a.text()
-	}
-	return
+	return m, nil
 }
 
-//HasWord TODO
-func (a *Agent) HasWord(word string) (m Message, err error) {
-	m, err = a.text()
-	word = strings.ToLower(word)
+func (a *agent) Message() (Message, error) {
+	for {
+		m, err := a.message()
+		if err != nil {
+			return m, err
+		}
 
-	logrus.Infof("Text: %s", m.Text)
-	logrus.Infof("Word: %s", word)
+		if strings.Contains(m.Text, spamMessage) {
+			continue
+		}
 
-	if !strings.Contains(strings.ToLower(m.Text), word) {
-		logrus.Info("Does not have the right word, discarding...")
-		return a.HasWord(word)
+		if m.Type == textType {
+			m.Text = strings.ToLower(m.Text)
+			return m, nil
+		}
 	}
-	return
-}
-
-//PrefixMessage returns a Message when it has some prefix string.
-func (a *Agent) PrefixMessage(prefix string) (m Message, err error) {
-	m, err = a.text()
-	prefix = strings.ToLower(prefix)
-
-	logrus.Infof("Text: %s", m.Text)
-	logrus.Infof("Prefix: %s", prefix)
-
-	if !strings.HasPrefix(strings.ToLower(m.Text), prefix) {
-		logrus.Info("Wrong prefix")
-		return a.PrefixMessage(prefix)
-	}
-	logrus.Info("Removing prefix")
-	m.Text = strings.Replace(m.Text, prefix, "", 1)
-	m.Text = strings.Trim(m.Text, " ")
-	return
 }
 
 //SendMessage sends a Message to a channel.
-func (a *Agent) SendMessage(m Message) {
+func (a *agent) SendMessage(m Message) {
 	m.ID = atomic.AddUint64(&a.counter, counterIncrement)
 	go websocket.JSON.Send(a.ws, m)
 }
