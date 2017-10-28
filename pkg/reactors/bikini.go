@@ -3,6 +3,7 @@ package reactors
 import (
 	"strings"
 
+	"fmt"
 	"github.com/disiqueira/MySlackBot/pkg/listener"
 	"github.com/disiqueira/MySlackBot/pkg/provider"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
@@ -46,9 +47,15 @@ func (b *bikini) Execute(agent slack.Agent, message slack.Message) error {
 	text = strings.Trim(text, " ")
 	answer := message
 
-	photos, err := b.filterPhotos(b.userFromMessageText(text), concept, minConceptValue)
+	user := b.userFromMessageText(text)
+	photos, err := b.filterPhotos(user, concept, minConceptValue)
 	if err != nil {
 		return err
+	}
+
+	if len(photos) == 0 {
+		answer.Text = fmt.Sprintf("I couldn't find any bikini photo in %s account. :(", user)
+		agent.SendMessage(answer)
 	}
 
 	for _, photo := range photos {
