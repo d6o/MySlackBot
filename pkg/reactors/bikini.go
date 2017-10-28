@@ -35,7 +35,7 @@ func NewBikini(instagram provider.Instagram, imageRecognition provider.ImageReco
 }
 
 func (b *bikini) Usage() string {
-	return b.prefix + " {user}"
+	return b.prefix + " {user} - Search for bikini pictures in a Instagram account."
 }
 
 func (b *bikini) Execute(agent slack.Agent, message slack.Message) error {

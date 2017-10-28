@@ -38,7 +38,7 @@ func NewPokemon(provider provider.Pokemon, prefix string) Pokemon {
 }
 
 func (w *pokemon) Usage() string {
-	return w.prefix + " {pokemon}"
+	return w.prefix + " {pokemon} - Search a Pokemon by name or number"
 }
 
 func (w *pokemon) Execute(agent slack.Agent, message slack.Message) error {

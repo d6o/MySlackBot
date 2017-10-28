@@ -25,7 +25,7 @@ func NewChoose(prefix string) Choose {
 }
 
 func (c *choose) Usage() string {
-	return c.prefix + " {param1}, {param2} [, {param3} ...]"
+	return c.prefix + " {param1}, {param2} [, {param3} ...] - Randomly picks one of the options"
 }
 
 func (c *choose) Execute(agent slack.Agent, message slack.Message) error {

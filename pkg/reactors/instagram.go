@@ -33,7 +33,7 @@ func NewInstagram(provider provider.Instagram, prefix string) Instagram {
 }
 
 func (i *instagram) Usage() string {
-	return i.prefix + " {user}[,{num_photos}]"
+	return i.prefix + " {user}[,{num_photos}] - Returns the last n pictures of an Instagram account"
 }
 
 func (i *instagram) Execute(agent slack.Agent, message slack.Message) error {

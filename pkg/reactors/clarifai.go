@@ -28,7 +28,7 @@ func NewImageRecognition(provider provider.ImageRecognition, prefix string) Imag
 }
 
 func (i *imageRecognition) Usage() string {
-	return i.prefix + " {url}"
+	return i.prefix + " {url} returns the main tags of the picture"
 }
 
 func (i *imageRecognition) Execute(agent slack.Agent, message slack.Message) error {

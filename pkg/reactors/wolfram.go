@@ -27,7 +27,7 @@ func NewWolfram(provider provider.Wolfram, prefix string) Wolfram {
 }
 
 func (w *wolfram) Usage() string {
-	return w.prefix + " {question}"
+	return w.prefix + " {question} - Answer any question in natural language"
 }
 
 func (w *wolfram) Execute(agent slack.Agent, message slack.Message) error {

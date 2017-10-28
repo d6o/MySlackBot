@@ -31,7 +31,7 @@ func NewRandom(prefix string) Random {
 }
 
 func (r *random) Usage() string {
-	return r.prefix + " {maxValue}"
+	return r.prefix + " {maxValue} - Return a random number between zero and the specified value"
 }
 
 func (r *random) Execute(agent slack.Agent, message slack.Message) error {

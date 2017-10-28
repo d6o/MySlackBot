@@ -34,7 +34,7 @@ func NewLastFM(provider provider.LastFM, prefix, fallback string) LastFM {
 }
 
 func (l *lastFM) Usage() string {
-	return l.prefix + " {user}"
+	return l.prefix + " {user} - Returns the last music the user was listening."
 }
 
 func (l *lastFM) Execute(agent slack.Agent, message slack.Message) error {

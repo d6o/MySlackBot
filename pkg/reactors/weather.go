@@ -34,7 +34,7 @@ func NewWeather(provider provider.Weather, prefix, fallback string) Weather {
 }
 
 func (w *weather) Usage() string {
-	return w.prefix + " {city}"
+	return w.prefix + " {city} - Returns the actual weather of a region"
 }
 
 func (w *weather) Execute(agent slack.Agent, message slack.Message) error {

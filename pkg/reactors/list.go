@@ -22,7 +22,7 @@ func NewList(prefix string) List {
 }
 
 func (l *list) Usage() string {
-	return l.prefix
+	return l.prefix + " - List all commands"
 }
 
 func (l *list) Execute(agent slack.Agent, message slack.Message) error {
