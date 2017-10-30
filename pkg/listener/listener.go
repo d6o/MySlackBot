@@ -3,6 +3,7 @@ package listener
 import (
 	"errors"
 
+	"fmt"
 	"github.com/disiqueira/MySlackBot/pkg/slack"
 )
 
@@ -36,7 +37,9 @@ func (o *consumer) Listen() error {
 			return err
 		}
 		if err := o.executeReactors(m); err != nil {
-			return err
+			answer := m
+			answer.Text = fmt.Sprintf("ERR: %s", err.Error())
+			o.slack.SendMessage(answer)
 		}
 		o.verifyList(m)
 	}
