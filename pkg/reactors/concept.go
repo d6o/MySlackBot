@@ -10,11 +10,11 @@ import (
 )
 
 type (
-	Bikini interface {
+	Concept interface {
 		listener.Reactor
 	}
 
-	bikini struct {
+	concept struct {
 		prefix           string
 		instagram        provider.Instagram
 		imageRecognition provider.ImageRecognition
@@ -23,23 +23,27 @@ type (
 
 const (
 	numPhotos       = 100
-	concept         = "bikini"
 	minConceptValue = 0.9
+	conceptDefault  = "bikini"
 )
 
-func NewBikini(instagram provider.Instagram, imageRecognition provider.ImageRecognition, prefix string) Bikini {
-	return &bikini{
+func NewBikini(instagram provider.Instagram, imageRecognition provider.ImageRecognition, prefix string) Concept {
+	return NewConcept(instagram, imageRecognition, prefix)
+}
+
+func NewConcept(instagram provider.Instagram, imageRecognition provider.ImageRecognition, prefix string) Concept {
+	return &concept{
 		prefix:           prefix,
 		instagram:        instagram,
 		imageRecognition: imageRecognition,
 	}
 }
 
-func (b *bikini) Usage() string {
-	return b.prefix + " {user} - Search for bikini pictures in a Instagram account."
+func (b *concept) Usage() string {
+	return b.prefix + " {user},{concept} - Search for concepts in pictures from an Instagram account."
 }
 
-func (b *bikini) Execute(agent slack.Agent, message slack.Message) error {
+func (b *concept) Execute(agent slack.Agent, message slack.Message) error {
 	if !strings.HasPrefix(message.Text, b.prefix) {
 		return nil
 	}
@@ -47,14 +51,14 @@ func (b *bikini) Execute(agent slack.Agent, message slack.Message) error {
 	text = strings.Trim(text, " ")
 	answer := message
 
-	user := b.userFromMessageText(text)
+	user, concept := b.userAndConceptFromMessageText(text)
 	photos, err := b.filterPhotos(user, concept, minConceptValue)
 	if err != nil {
 		return err
 	}
 
 	if len(photos) == 0 {
-		answer.Text = fmt.Sprintf("I couldn't find any bikini photo in %s account. :(", user)
+		answer.Text = fmt.Sprintf("I couldn't find any %s photos in %s account. :(", concept, user)
 		agent.SendMessage(answer)
 	}
 
@@ -65,7 +69,7 @@ func (b *bikini) Execute(agent slack.Agent, message slack.Message) error {
 	return nil
 }
 
-func (b *bikini) filterPhotos(user, conceptFilter string, valueFilter float64) ([]string, error) {
+func (b *concept) filterPhotos(user, conceptFilter string, valueFilter float64) ([]string, error) {
 	photos, err := b.instagram.LastPhotos(user, numPhotos)
 	if err != nil {
 		return nil, err
@@ -86,10 +90,15 @@ func (b *bikini) filterPhotos(user, conceptFilter string, valueFilter float64) (
 	return final, nil
 }
 
-func (b *bikini) userFromMessageText(text string) string {
+func (b *concept) userAndConceptFromMessageText(text string) (string, string) {
 	if len(text) == 0 {
-		return userDefault
+		return userDefault, conceptDefault
 	}
 
-	return text
+	split := strings.Split(text, ",")
+	if len(split) == 1 {
+		return split[0], conceptDefault
+	}
+
+	return strings.TrimSpace(split[0]), strings.TrimSpace(split[1])
 }
