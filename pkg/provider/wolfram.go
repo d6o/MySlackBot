@@ -1,26 +1,42 @@
 package provider
 
 import (
+	"encoding/json"
 	"fmt"
-	"strings"
-
 	"github.com/parnurzeal/gorequest"
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	urlWolfram  = "https://api.wolframalpha.com/v1/result?appid=%s&i=%s"
-	errorString = "Wolfram|Alpha did not understand your input"
-	errorAnswer = "Aiii, não entendi... :("
+	urlWolfram = "http://api.wolframalpha.com/v2/query?appid=%s&input=%s&output=JSON&format=image,plaintext"
 )
 
 type (
 	Wolfram interface {
-		Ask(string) (string, error)
+		Ask(string) (*WolframResponse, error)
 	}
 
 	wolfram struct {
 		token string
+	}
+
+	WolframResponse struct {
+		Queryresult struct {
+			Success       bool    `json:"success"`
+			Error         bool    `json:"error"`
+			Pods          []struct {
+				Title string `json:"title"`
+				Subpods    []struct {
+					Title string `json:"title"`
+					Plaintext string `json:"plaintext"`
+				} `json:"subpods"`
+			} `json:"pods"`
+			Didyoumeans   []struct {
+				Score string `json:"score"`
+				Level string `json:"level"`
+				Val   string `json:"val"`
+			} `json:"didyoumeans"`
+		} `json:"queryresult"`
 	}
 )
 
@@ -31,17 +47,13 @@ func NewWolfram(token string) Wolfram {
 }
 
 //Ask returns weather by City name.
-func (w *wolfram) Ask(question string) (string, error) {
+func (w *wolfram) Ask(question string) (*WolframResponse, error) {
 	body, err := w.makeRequest(question)
 	if err != nil {
-		return "Error asking question :(", err
+		return nil, err
 	}
 
-	if strings.Contains(body, errorString) {
-		body = errorAnswer
-	}
-
-	return body, nil
+	return w.transformStringToResponse(body)
 }
 
 func (w *wolfram) makeRequest(question string) (body string, err error) {
@@ -51,6 +63,16 @@ func (w *wolfram) makeRequest(question string) (body string, err error) {
 	if errs != nil {
 		return "", errs[0]
 	}
-	logrus.Infof("Response body: %s", body)
+
 	return body, nil
+}
+
+func (w *wolfram) transformStringToResponse(body string) (*WolframResponse, error) {
+	resp := WolframResponse{}
+	fmt.Println(body)
+	if err := json.Unmarshal([]byte(body), &resp); err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
 }
