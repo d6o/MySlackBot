@@ -57,10 +57,6 @@ func (w *wolfram) Execute(agent slack.Agent, message slack.Message) error {
 		}
 	}
 
-	for _, mean := range wolframAnswer.Queryresult.Didyoumeans {
-		plainTextList = append(plainTextList,fmt.Sprintf("You should try: %s (%s)", mean.Val, mean.Score))
-	}
-
 	if len(plainTextList) == 0 {
 		answer.Text = multivac
 

@@ -31,11 +31,6 @@ type (
 					Plaintext string `json:"plaintext"`
 				} `json:"subpods"`
 			} `json:"pods"`
-			Didyoumeans   []struct {
-				Score string `json:"score"`
-				Level string `json:"level"`
-				Val   string `json:"val"`
-			} `json:"didyoumeans"`
 		} `json:"queryresult"`
 	}
 )
